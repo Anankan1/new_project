@@ -72,6 +72,11 @@ class FaceDetector(Node):
                 center_y = depth_frame.get_height() // 2
                 distance_to_center = distances[center_y, center_x]
 
+                # # Calculate the distance in meters
+                # depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
+                # distance = depth_value * depth_intrin.depth_scale
+
+                # depth_value = depth_frame.get_distance(center_x, center_y)
                 return center_x
 
         finally:
@@ -89,7 +94,8 @@ class FaceDetector(Node):
     
     def find_angle(self,d1,d2):
         width= d1-d2
-        width_in_cm=self.pixel_to_CM_conversion(width,ppi)
+        # ppi=ppi
+        width_in_cm=self.pixel_to_CM_conversion(width,self.ppi)
         angle_value=width_in_cm / self.known_distance
         result_radians = math.atan(angle_value)
         angle_degree= math.degrees(result_radians)
@@ -123,7 +129,7 @@ class FaceDetector(Node):
                 return None
             
             max_length=608
-            if len(list1)>2:
+            if len(list1)>=2:
                 for i in range(0,max_length,1):
                     if faces:
                         x_rotation= self.find_angle(list1[-1][0],list1[-2][0])

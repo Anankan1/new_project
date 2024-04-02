@@ -1,0 +1,5 @@
+cmake==3.28.4
+wheel==0.43.0
+dlib==19.24.2
+pip==20.2.3
+setuptools==49.2.1

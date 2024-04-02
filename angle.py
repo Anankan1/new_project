@@ -16,3 +16,20 @@ def moving_angle(x,y,x_previous,y_previous):
     x_rotation= find_angle(x,x_previous)
     y_rotation =find_angle(y,y_previous)
     return (x_rotation, y_rotation)
+
+# moving angles in degree. it could be minus value
+    def moving_angle(self,x,y,x_previous,y_previous):
+        max_length=1.608
+        for i in range(0,max_length,1):
+            if faces:
+                x_rotation= self.find_angle(x,x_previous)
+                y_rotation =self.find_angle(y,y_previous)
+                y_lift=i
+                return (x_rotation, y_rotation,y_lift)
+            else:
+                continue
+
+
+a=10
+def myname(b):
+    c=a+b
