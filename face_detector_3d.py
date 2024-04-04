@@ -33,8 +33,6 @@ class FaceDetector:
             faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
 
             if self.depth_image is not None:
-                list1=[]
-                list2=[]
                 for (x, y, w, h) in faces:
                     face_center = Point()
                     face_center.x = x + w / 2
