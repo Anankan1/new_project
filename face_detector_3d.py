@@ -45,8 +45,8 @@ class FaceDetector:
                     face_center.z = depth_value  # Assign the depth value
 
                     ppi=0.03076/118
-                    x_difference=400-list2[-2][0]
-                    y_difference=300-list2[-2][1]
+                    x_difference=list2[-2][0] -400
+                    y_difference=list2[-2][1] -300
                     x_axis=ppi*x_difference
                     y_axis=ppi*y_difference
                     z_axis=list2[-2][2]
