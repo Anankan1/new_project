@@ -44,21 +44,34 @@ class FaceDetector:
                     depth_value = self.depth_image[int(face_center.y), int(face_center.x)]
                     face_center.z = depth_value  # Assign the depth value
 
-                    list1.append(face_center.x)
-                    list1.append(face_center.y)
-                    list1.append(face_center.z)
-                    list2.append(list1)
-                    if len(list2)>=2:
-                        x_difference=list2[-1][0]-list2[-2][0]
-                        y_difference=list2[-1][1]-list2[-2][1]
-                        z_axis=list2[-2][2]
-                        # Calculate arctangent (in radians)
-                        result_x_radians = math.atan(x_difference / z_axis)
-                        result_y_radians = math.atan(y_difference / z_axis)
-                        # Convert radians to degrees if needed
-                        result_x_degrees = math.degrees(result_x_radians)
-                        result_y_degrees = math.degrees(result_y_radians)
-                        print(result_x_degrees,result_y_degrees)
+                    ppi=0.03076/118
+                    x_difference=400-list2[-2][0]
+                    y_difference=300-list2[-2][1]
+                    x_axis=ppi*x_difference
+                    y_axis=ppi*y_difference
+                    z_axis=list2[-2][2]
+                    # Calculate arctangent (in radians)
+                    result_x_radians = math.atan(x_axis / z_axis)
+                    result_y_radians = math.atan(y_axis / z_axis)
+                    # Convert radians to degrees if needed
+                    result_x_degrees = math.degrees(result_x_radians)
+                    result_y_degrees = math.degrees(result_y_radians)
+                    print(result_x_degrees,result_y_degrees)
+                    # list1.append(face_center.x)
+                    # list1.append(face_center.y)
+                    # list1.append(face_center.z)
+                    # list2.append(list1)
+                    # if len(list2)>=2:
+                    #     x_difference=list2[-1][0]-list2[-2][0]
+                    #     y_difference=list2[-1][1]-list2[-2][1]
+                    #     z_axis=list2[-2][2]
+                    #     # Calculate arctangent (in radians)
+                    #     result_x_radians = math.atan(x_difference / z_axis)
+                    #     result_y_radians = math.atan(y_difference / z_axis)
+                    #     # Convert radians to degrees if needed
+                    #     result_x_degrees = math.degrees(result_x_radians)
+                    #     result_y_degrees = math.degrees(result_y_radians)
+                    #     print(result_x_degrees,result_y_degrees)
                     self.face_pub.publish(face_center)
                     cv2.rectangle(cv_image, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
