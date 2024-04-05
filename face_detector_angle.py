@@ -43,11 +43,14 @@ class FaceDetector:
             faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
             print(f"faces: {faces}")
             result_radians = Point()
+            list3=[0]
 
             if ( list1[-1]== 0) and (list2[-1] == 0):
-                result_radians.z -= 0.1
+                angle_z=list3[-1]-0.1
+                list3.append(angle_z)
+                result_radians.z =list3[-1]
             else:
-                result_radians.z += 0.0
+                result_radians.z=list3[-1]
 
             print(f"z: {result_radians.z}")
             if self.depth_image is not None:
