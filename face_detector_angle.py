@@ -21,9 +21,9 @@ class FaceDetector:
         self.face_angle_pub = rospy.Publisher('/face_angle_position', Point, queue_size=10)
         self.bridge_object = CvBridge()
 
-        self.face_center = Point()
-        self.face_center.x = 0
-        self.face_center.y = 0
+        # self.face_center = Point()
+        # self.face_center.x = 0
+        # self.face_center.y = 0
 
     def depth_callback(self, msg):
         try:
@@ -33,34 +33,40 @@ class FaceDetector:
 
     def image_callback(self, msg):
         try:
+            list1=[0]
+            list2=[0]
+            
+            # face_center.x=0
+            # face_center.y=0
             cv_image = self.bridge_object.imgmsg_to_cv2(msg, 'bgr8')
             gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
             faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
             print(f"faces: {faces}")
             result_radians = Point()
 
-            if (self.face_center.x == 0) and (self.face_center.y == 0):
+            if ( list1[-1]== 0) and (list2[-1] == 0):
                 result_radians.z -= 0.1
             else:
-                result_radians.z 
+                result_radians.z += 0.0
 
             print(f"z: {result_radians.z}")
             if self.depth_image is not None:
                 for (x, y, w, h) in faces:
-
-                    self.face_center.x = x + w / 2
-                    self.face_center.y = y + h / 2
-
+                    face_center= Point()
+                    face_center.x = x + w / 2
+                    face_center.y = y + h / 2
+                    list1.append(face_center.x)
+                    list2.append(face_center.y)
                     #calculate the depth value
                     depth_value = self.depth_image[int(self.face_center.y), int(self.face_center.x)]
                     self.face_center.z = depth_value  # Assign the depth value
 
                     ppi=0.03076/118
-                    x_difference=self.face_center.x -400
-                    y_difference=300- self.face_center.y
+                    x_difference=face_center.x -400
+                    y_difference=300- face_center.y
                     x_axis=ppi*x_difference
                     y_axis=ppi*y_difference
-                    z_axis=self.face_center.z
+                    z_axis=face_center.z
                     # Calculate arctangent (in radians)
                     result_radians.x = math.atan(x_axis / z_axis)
                     result_radians.y = math.atan(y_axis / z_axis)
