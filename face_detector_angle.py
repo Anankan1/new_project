@@ -67,11 +67,13 @@ class FaceDetector:
                     face_center.z = depth_value  # Assign the depth value
 
                     if (self.list2[-1] <=300):
-                        angle_1=self.list3[-1]-0.001
-                        angle_z=round(angle_1,3)
-                        self.list3.append(angle_z)
-                        result_radians.z = self.list3[-1]
-                        continue
+                        if (self.list3[-1])<= -0.608:
+                            angle_1=self.list3[-1]-0.001
+                            angle_z=round(angle_1,3)
+                            self.list3.append(angle_z)
+                            result_radians.z = self.list3[-1]
+                        else:
+                            result_radians.y =result_radians.y +0.01
 
                     if (face_center.x>400):
                         result_radians.x=result_radians.x+0.01
