@@ -52,11 +52,6 @@ class FaceDetector:
                 self.list3.append(angle_z)
                 result_radians.z = self.list3[-1]
                 #sleep(1)
-            elif (self.list2[-1] <=300):
-                angle_1=self.list3[-1]-0.001
-                angle_z=round(angle_1,3)
-                self.list3.append(angle_z)
-                result_radians.z = self.list3[-1]
             else:
                 result_radians.z = self.list3[-1]
 
@@ -70,6 +65,13 @@ class FaceDetector:
                     self.list2.append(face_center.y)
                     depth_value = self.depth_image[int(face_center.y), int(face_center.x)]
                     face_center.z = depth_value  # Assign the depth value
+
+                    if (self.list2[-1] <=300):
+                        angle_1=self.list3[-1]-0.001
+                        angle_z=round(angle_1,3)
+                        self.list3.append(angle_z)
+                        result_radians.z = self.list3[-1]
+                        continue
 
                     if (face_center.x>400):
                         result_radians.x=result_radians.x+0.01
