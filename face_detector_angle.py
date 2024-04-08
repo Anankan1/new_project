@@ -52,6 +52,11 @@ class FaceDetector:
                 self.list3.append(angle_z)
                 result_radians.z = self.list3[-1]
                 #sleep(1)
+            elif (self.list2[-1] <=300):
+                angle_1=self.list3[-1]-0.001
+                angle_z=round(angle_1,3)
+                self.list3.append(angle_z)
+                result_radians.z = self.list3[-1]
             else:
                 result_radians.z = self.list3[-1]
 
@@ -66,17 +71,22 @@ class FaceDetector:
                     depth_value = self.depth_image[int(face_center.y), int(face_center.x)]
                     face_center.z = depth_value  # Assign the depth value
 
-                    ppi=0.03076/118
-                    x_difference=face_center.x -400
-                    # y_difference=300- face_center.y
-                    y_difference=face_center.y -300
+                    if (face_center.x>400):
+                        result_radians.x=result_radians.x+0.01
+                    elif( face_center.x<400):
+                        result_radians.x=result_radians.x-0.01
 
-                    x_axis=ppi*x_difference
-                    y_axis=ppi*y_difference
-                    z_axis=face_center.z
-                    # Calculate arctangent (in radians)
-                    result_radians.x = math.atan(x_axis / z_axis)
-                    result_radians.y = math.atan(y_axis / z_axis)
+                    # ppi=0.03076/118
+                    # x_difference=face_center.x -400
+                    # # y_difference=300- face_center.y
+                    # y_difference=face_center.y -300
+
+                    # x_axis=ppi*x_difference
+                    # y_axis=ppi*y_difference
+                    # z_axis=face_center.z
+                    # # Calculate arctangent (in radians)
+                    # result_radians.x = math.atan(x_axis / z_axis)
+                    # result_radians.y = math.atan(y_axis / z_axis)
                     # Convert radians to degrees if needed
                     # result_x_degrees = math.degrees(result_x_radians)
                     # result_y_degrees = math.degrees (result_y_radians)
