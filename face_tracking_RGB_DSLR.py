@@ -69,27 +69,31 @@ class FaceDetector:
                     # face_center.z = depth_value  # Assign the depth value
 
                     # print(f"y value: {self.list2[-1]}")
-                    if (self.list2[-1]>250):
+                    if (self.list2[-1]>250.0):
                         # if (self.list1[-1])>self.list1[-2]:
                         #     result_radians.x=self.list5[-1]+0.01
                         #     self.list5.append(result_radians.x)
                         # else:
                         self.list3.append(round((self.list3[-1]+0.001),3))
                         result_radians.z=self.list3[-1]
+                        result_radians.y=0.0
                     #elif(self.list1[-1]<400) and -1.57<=self.list5[-1]<=1.57:
-                    elif (self.list2[-1]<230):
+                    elif (self.list2[-1]<230.0):
+                        if self.list3[-1]<= -0.608:
                         # if (self.list1[-1])>self.list1[-2]:
                         #     result_radians.x=self.list5[-1]+0.01
                         #     self.list5.append(result_radians.x)
                         # else:
-                        self.list3.append(round((self.list3[-1]-0.001),3))
-                        result_radians.z=self.list3[-1]
-                        
-                    #     result_radians.x=self.list5[-1]-0.01
-                    #     self.list5.append(result_radians.x)
+                            self.list3.append(round((self.list3[-1]-0.001),3))
+                            result_radians.z=self.list3[-1]
+                            result_radians.y=0.0
+                        else:
+                            result_radians.z=-0.608
+                            self.list4.append(self.list4[-1]+0.01)
+                            result_radians.y=self.list4[-1]
                     else:
+                        result_radians.y=0.0
                         result_radians.z=self.list3[-1]
-                        self.list3.append(result_radians.z)
 
                     print(f"x value: {self.list1[-1]}")
                     print(f"y value: {self.list2[-1]}")
