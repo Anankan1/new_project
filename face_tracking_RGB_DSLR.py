@@ -36,6 +36,38 @@ class FaceDetector:
     #         self.depth_image = self.bridge_object.imgmsg_to_cv2(msg, desired_encoding='passthrough')
     #     except CvBridgeError as e:
     #         rospy.logerr(e)
+    def find_image(self):
+        if (self.list2[-1]>245.0):
+            self.list3.append(round((self.list3[-1]+0.001),3))
+            result_radians_z=self.list3[-1]
+            result_radians_y=0.0
+        elif (self.list2[-1]<235.0):
+            if self.list3[-1] > -0.608:
+                self.list3.append(round((self.list3[-1]-0.001),3))
+                result_radians_z=self.list3[-1]
+                result_radians_y=0.0
+            else:
+                result_radians_z=-0.608
+                self.list4.append(self.list4[-1]+0.01)
+                result_radians_y=self.list4[-1]
+        else:
+            result_radians_y=0.0
+            result_radians_z=self.list3[-1]
+
+        if (self.list1[-1]>330):
+            result_radians_x=self.list5[-1]+0.01
+            self.list5.append(result_radians_x)
+        elif (self.list1[-1]<310):
+            result_radians_x=self.list5[-1]-0.01
+            self.list5.append(result_radians_x)
+        else:
+            result_radians_x=self.list5[-1]
+            self.list5.append(result_radians_x)
+        list1=[]
+        list1.append(result_radians_x)
+        list1.append(result_radians_y)
+        list1.append(result_radians_z)
+        return(list1)
 
     def image_callback(self, msg):
         try:
@@ -53,6 +85,9 @@ class FaceDetector:
                 angle_z=round(angle_1,3)
                 self.list3.append(angle_z)
                 result_radians.z = self.list3[-1]
+                result_radians.x=0.0
+                result_radians.y=0.0
+
                 #sleep(1)
             else:
                 result_radians.z = self.list3[-1]
@@ -67,58 +102,17 @@ class FaceDetector:
                     self.list2.append(face_center.y)
                     # depth_value = self.depth_image[int(face_center.y), int(face_center.x)]
                     # face_center.z = depth_value  # Assign the depth value
-
-                    # print(f"y value: {self.list2[-1]}")
-                    if (self.list2[-1]>250.0):
-                        # if (self.list1[-1])>self.list1[-2]:
-                        #     result_radians.x=self.list5[-1]+0.01
-                        #     self.list5.append(result_radians.x)
-                        # else:
-                        self.list3.append(round((self.list3[-1]+0.001),3))
-                        result_radians.z=self.list3[-1]
-                        result_radians.y=0.0
-                    #elif(self.list1[-1]<400) and -1.57<=self.list5[-1]<=1.57:
-                    elif (self.list2[-1]<230.0):
-                        if self.list3[-1]<= -0.608:
-                        # if (self.list1[-1])>self.list1[-2]:
-                        #     result_radians.x=self.list5[-1]+0.01
-                        #     self.list5.append(result_radians.x)
-                        # else:
-                            self.list3.append(round((self.list3[-1]-0.001),3))
-                            result_radians.z=self.list3[-1]
-                            result_radians.y=0.0
-                        else:
-                            result_radians.z=-0.608
-                            self.list4.append(self.list4[-1]+0.01)
-                            result_radians.y=self.list4[-1]
-                    else:
-                        result_radians.y=0.0
-                        result_radians.z=self.list3[-1]
-
                     print(f"x value: {self.list1[-1]}")
                     print(f"y value: {self.list2[-1]}")
-                    #if (self.list1[-1]>400) and -1.57<=self.list5[-1]<=1.57:
-                    if (self.list1[-1]>330):
-                        # if (self.list1[-1])>self.list1[-2]:
-                        #     result_radians.x=self.list5[-1]+0.01
-                        #     self.list5.append(result_radians.x)
-                        # else:
-                        result_radians.x=self.list5[-1]+0.01
-                        self.list5.append(result_radians.x)
-                    #elif(self.list1[-1]<400) and -1.57<=self.list5[-1]<=1.57:
-                    elif (self.list1[-1]<310):
-                        # if (self.list1[-1])>self.list1[-2]:
-                        #     result_radians.x=self.list5[-1]+0.01
-                        #     self.list5.append(result_radians.x)
-                        # else:
-                        result_radians.x=self.list5[-1]-0.01
-                        self.list5.append(result_radians.x)
-                    #     result_radians.x=self.list5[-1]-0.01
-                    #     self.list5.append(result_radians.x)
-                    else:
-                        result_radians.x=self.list5[-1]
-                        self.list5.append(result_radians.x)
 
+                    values=self.find_image()
+
+                    result_radians.x=values[0]
+                    result_radians.y=values[1]
+                    result_radians.z=values[2]
+
+
+                    
                     # ppi=0.03076/118
                     # x_difference=face_center.x -400
                     # # y_difference=300- face_center.y
@@ -148,6 +142,8 @@ class FaceDetector:
 
         except Exception as e:
             rospy.logerr(f'Error processing image: {e}')
+
+    
 
     def run(self):
         rospy.spin()
